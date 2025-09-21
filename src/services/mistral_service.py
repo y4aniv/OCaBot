@@ -60,6 +60,42 @@ class MistralService:
             logger.error(f"Erreur lors de l'appel à Mistral: {str(e)}")
             return None
     
+    async def generate_thread_name(self, code: str) -> Optional[str]:
+        """
+        Génère un nom de thread concis basé sur le code OCaml.
+        
+        Args:
+            code: Code OCaml source
+            
+        Returns:
+            Nom de thread généré ou None en cas d'erreur
+        """
+        try:
+            messages = [{
+                "role": "system",
+                "content": "Tu es un assistant qui génère des noms de threads concis et descriptifs. Le nom doit faire maximum 50 caractères, être en français et décrire brièvement ce que fait le code OCaml. N'utilise pas de guillemets dans ta réponse, juste le nom du thread."
+            }, {
+                "role": "user",
+                "content": f"Génère un nom de thread concis (max 50 caractères) qui décrit ce code OCaml:\n{code}"
+            }]
+            
+            logger.info("Génération de nom de thread via Mistral")
+            response = self.client.chat.complete(
+                model="mistral-large-latest",
+                messages=messages
+            )
+            
+            thread_name = response.choices[0].message.content.strip()
+            if len(thread_name) > 50:
+                thread_name = thread_name[:47] + "..."
+            
+            logger.info(f"Nom de thread généré: {thread_name}")
+            return thread_name
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de la génération du nom de thread: {str(e)}")
+            return None
+    
     async def generate_response(self, context: str, question: str) -> Optional[str]:
         """
         Génère une réponse basée sur le contexte et la question.

@@ -75,11 +75,21 @@ class EvaluateModal(nextcord.ui.Modal):
             channel = interaction.channel
             async for message in channel.history(limit=1):
                 if message.author == interaction.client.user and message.embeds:
+                    # Créer le thread avec un nom temporaire d'abord
                     thread_name = Messages.EVALUATE_THREAD_NAME.format(
                         username=interaction.user.display_name
                     )
                     thread = await message.create_thread(name=thread_name)
                     await thread.trigger_typing()
+                    
+                    custom_thread_name = await self.mistral_service.generate_thread_name(code)
+                    
+                    if custom_thread_name:
+                        try:
+                            await thread.edit(name=custom_thread_name)
+                            logger.info(f"Thread renommé: {custom_thread_name}")
+                        except Exception as rename_error:
+                            logger.warning(f"Impossible de renommer le thread: {rename_error}")
                     
                     explanation = await self.mistral_service.explain_ocaml_code(code, output)
                     
