@@ -90,7 +90,8 @@ class EvaluateModal(nextcord.ui.Modal):
                             logger.info(f"Thread renommé: {custom_thread_name}")
                         except Exception as rename_error:
                             logger.warning(f"Impossible de renommer le thread: {rename_error}")
-                    
+
+                    await thread.trigger_typing()
                     explanation = await self.mistral_service.explain_ocaml_code(code, output)
                     
                     if explanation:
