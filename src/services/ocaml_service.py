@@ -43,7 +43,7 @@ class OCamlService:
                 "--seccomp",
                 "--caps.drop=all",
                 f"--read-only={os.path.dirname(temp_file_path)}",
-                "--timeout=30",
+                "--timeout=00:00:30",
                 "--rlimit-cpu=10",
                 "--rlimit-as=134217728",
                 "--rlimit-nproc=10",
