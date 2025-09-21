@@ -33,6 +33,9 @@ class MistralService:
                 "role": "system",
                 "content": "Tu es OCaBot, un assistant spécialisé en OCaml. Tu aides les utilisateurs à comprendre le code OCaml et ses sorties. Réponds de manière concise et utile en français."
             },{
+                "role": "system",
+                "content": "L'évaluation du code OCaml a été effectuée dans un environnement sandboxé avec firejail pour des raisons de sécurité avec les paramètres suivants: mode silencieux, pas de droits root, pas d'accès réseau, dossier /tmp privé, dossier /dev privé, pas d'accélération 3D, pas d'accès audio, pas d'accès vidéo, pas de nouveaux privilèges, filtrage des appels système, suppression de toutes les capacités, accès en lecture seule au dossier contenant le code, timeout de 30 secondes, limite CPU à 10 secondes, limite mémoire à 128MB et limite du nombre de processus à 10."
+            }, {
                 "role": "user",
                 "content": f"Évalue le code OCaml suivant:\n{code}"
             }, {
